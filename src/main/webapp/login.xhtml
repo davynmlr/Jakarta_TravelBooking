@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Travel Booking — Login</title>
+</h:head>
+<h:body>
+    <h1>Travel Booking</h1>
+    <h2>Login</h2>
+
+    <h:form id="loginForm">
+        <p>
+            <h:outputLabel for="email" value="Email: "/>
+            <h:inputText id="email" value="#{sessionBean.email}"
+                         required="true"
+                         requiredMessage="Email is required."/>
+            <h:message for="email" style="color:red"/>
+        </p>
+
+        <p>
+            <h:outputLabel for="password" value="Password: "/>
+            <h:inputSecret id="password" value="#{sessionBean.password}"
+                           required="true"
+                           requiredMessage="Password is required."/>
+            <h:message for="password" style="color:red"/>
+        </p>
+
+        <h:panelGroup rendered="#{not empty sessionBean.loginError}">
+            <p style="color:red">#{sessionBean.loginError}</p>
+        </h:panelGroup>
+
+        <p>
+            <h:commandButton value="Login" action="#{sessionBean.login}"/>
+        </p>
+    </h:form>
+
+    <p>No account? <h:link value="Register here" outcome="register"/></p>
+
+    <p style="background:#fffbeb; padding:10px;">
+        <strong>Demo accounts:</strong><br/>
+        alice@example.com / password123<br/>
+        bob@example.com / password123
+    </p>
+
+</h:body>
+</html>

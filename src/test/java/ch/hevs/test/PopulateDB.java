@@ -4,8 +4,8 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
-import ch.hevs.businessobject.Account;
-import ch.hevs.businessobject.Client;
+import ch.hevs.travel.entity.Account;
+import ch.hevs.travel.entity.Client;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;

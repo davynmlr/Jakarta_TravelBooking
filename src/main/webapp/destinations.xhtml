@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:c="jakarta.tags.core">
+<h:head>
+    <title>Travel Booking — Destinations</title>
+</h:head>
+<h:body>
+
+    <f:event type="preRenderView" listener="#{sessionBean.requireLogin}"/>
+
+    <h1>Travel Booking</h1>
+
+    <p>
+        Welcome, <strong>#{sessionBean.currentPassenger.firstname}</strong> |
+        <h:form styleClass="inline">
+            <h:commandButton value="Logout" action="#{sessionBean.logout}"/>
+        </h:form>
+    </p>
+
+    <h:link value="Flights" outcome="flights"/> |
+    <h:link value="My Bookings" outcome="my-bookings"/>
+
+    <h2>Destinations</h2>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>City</th>
+                <th>Country</th>
+                <th>Airport</th>
+                <th>Code</th>
+                <th>Timezone</th>
+                <th>Flights available</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach items="#{flightBean.destinations}" var="dest">
+                <tr>
+                    <td>#{dest.city}</td>
+                    <td>#{dest.country}</td>
+                    <td>#{dest.airport}</td>
+                    <td>#{dest.airportCode}</td>
+                    <td>#{dest.timezone}</td>
+                    <td>#{dest.flights.size()}</td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
+
+</h:body>
+</html>
