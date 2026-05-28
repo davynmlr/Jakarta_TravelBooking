@@ -1,0 +1,17 @@
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Maven build output
+target/
+
+# OS
+.DS_Store
+Thumbs.db

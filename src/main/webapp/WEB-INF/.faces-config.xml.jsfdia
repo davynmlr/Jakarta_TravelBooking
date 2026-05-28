@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#welcomeBank.xhtml" PATH="/welcomeBank.xhtml"
+  SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#welcomeBank.xhtml:0" NAME="item"
+   PATH="/welcomeBank.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="transferForm::#transferForm.xhtml"
+    NAME="output" PATH="/transferForm.xhtml"
+    TARGET="rules:#transferForm.xhtml" TITLE="transferForm" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#transferForm.xhtml"
+  PATH="/transferForm.xhtml" SHAPE="240,33,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#transferForm.xhtml:0" NAME="item"
+   PATH="/transferForm.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="#{transferBean.performTransfer}::#showTransferResult.xhtml"
+    NAME="output" PATH="/showTransferResult.xhtml"
+    TARGET="rules:#showTransferResult.xhtml"
+    TITLE="#{transferBean.performTransfer}" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#showTransferResult.xhtml"
+  PATH="/showTransferResult.xhtml" SHAPE="448,17,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>
