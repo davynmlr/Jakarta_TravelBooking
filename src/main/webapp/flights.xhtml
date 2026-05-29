@@ -30,9 +30,9 @@
         </p>
     </h:panelGroup>
 
-    <!-- Filter by destination -->
+    <!-- Filter by destination and cabin class -->
     <h:form id="filterForm">
-        <h:outputLabel for="destFilter" value="Filter by destination: "/>
+        <h:outputLabel for="destFilter" value="Destination: "/>
         <h:selectOneMenu id="destFilter"
                          value="#{flightBean.selectedDestinationId}">
             <f:selectItem itemValue="0" itemLabel="— All destinations —"/>
@@ -41,8 +41,16 @@
                            itemValue="#{d.id}"
                            itemLabel="#{d.city} (#{d.airportCode})"/>
         </h:selectOneMenu>
-        <h:commandButton value="Filter"
-                         action="#{flightBean.filterByDestination}"/>
+
+        <h:outputLabel for="classFilter" value="  Cabin class: "/>
+        <h:selectOneMenu id="classFilter"
+                         value="#{flightBean.selectedCabinClass}">
+            <f:selectItem itemValue="ALL"      itemLabel="— All classes —"/>
+            <f:selectItem itemValue="Economy"  itemLabel="Economy"/>
+            <f:selectItem itemValue="Business" itemLabel="Business"/>
+        </h:selectOneMenu>
+
+        <h:commandButton value="Filter" action="#{flightBean.filterFlights}"/>
     </h:form>
 
     <!-- Flights table -->

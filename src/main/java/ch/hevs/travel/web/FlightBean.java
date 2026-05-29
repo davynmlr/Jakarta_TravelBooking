@@ -26,6 +26,7 @@ public class FlightBean {
     private List<Flight> flights;
     private List<Destination> destinations;
     private Long selectedDestinationId;
+    private String selectedCabinClass = "ALL";
     private String bookingMessage;
 
     @PostConstruct
@@ -66,11 +67,23 @@ public class FlightBean {
         return null;
     }
 
-    public void filterByDestination() {
+    public void filterFlights() {
+        List<Flight> all;
+
+        // First filter by destination
         if (selectedDestinationId == null || selectedDestinationId == 0L) {
-            flights = flightService.findAllFlights();
+            all = flightService.findAllFlights();
         } else {
-            flights = flightService.findFlightsByDestination(selectedDestinationId);
+            all = flightService.findFlightsByDestination(selectedDestinationId);
+        }
+
+        // Then filter by cabin class
+        if (selectedCabinClass == null || selectedCabinClass.equals("ALL")) {
+            flights = all;
+        } else {
+            flights = all.stream()
+                .filter(f -> f.getCabinClass().equals(selectedCabinClass))
+                .collect(java.util.stream.Collectors.toList());
         }
     }
 
@@ -86,4 +99,6 @@ public class FlightBean {
 
     public Long getSelectedDestinationId()        { return selectedDestinationId; }
     public void setSelectedDestinationId(Long id) { this.selectedDestinationId = id; }
+    public String getSelectedCabinClass()          { return selectedCabinClass; }
+    public void setSelectedCabinClass(String c)    { this.selectedCabinClass = c; }
 }
