@@ -13,7 +13,7 @@
     <h1>Travel Booking</h1>
 
     <p>
-        Welcome, <strong>#{sessionBean.currentPassenger.firstname}</strong> |
+        Welcome, <h:outputText value="#{sessionBean.currentPassenger.firstname}"/> |
         <h:form styleClass="inline">
             <h:commandButton value="Logout" action="#{sessionBean.logout}"/>
         </h:form>
@@ -23,16 +23,16 @@
     <h:link value="Destinations" outcome="destinations"/>
 
     <h2>My Bookings</h2>
-    <p>Flights booked by #{sessionBean.currentPassenger.fullName}</p>
+    <p><h:outputText value="Flights booked by #{sessionBean.currentPassenger.fullName}"/></p>
 
-    <h:panelGroup rendered="#{empty sessionBean.currentPassenger.flights}">
+    <h:panelGroup rendered="#{empty flightBean.currentPassengerFlights}">
         <p>You have no bookings yet.</p>
         <h:link value="Browse flights" outcome="flights"/>
     </h:panelGroup>
 
     <h:form id="cancelForm">
-        <h:panelGroup rendered="#{not empty sessionBean.currentPassenger.flights}">
-            <table border="1" cellpadding="8" cellspacing="0">
+        <h:panelGroup rendered="#{not empty flightBean.currentPassengerFlights}">
+            <table style="border:1px solid #000;border-collapse:collapse;">
                 <thead>
                     <tr>
                         <th>Flight</th>
@@ -44,17 +44,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach items="#{sessionBean.currentPassenger.flights}" var="flight">
+                    <c:forEach items="#{flightBean.currentPassengerFlights}" var="flight">
                         <tr>
-                            <td>#{flight.flightNumber} — #{flight.airline}</td>
-                            <td>#{flight.cabinClass}</td>
-                            <td>#{flight.destination.city} (#{flight.destination.airportCode})</td>
-                            <td>
-                                <h:outputText value="#{flight.departureTime}">
-                                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm"/>
-                                </h:outputText>
-                            </td>
-                            <td>#{flight.price}</td>
+                            <td><h:outputText value="#{flight.flightNumber} - #{flight.airline}"/></td>
+                            <td><h:outputText value="#{flight.cabinClass}"/></td>
+                            <td><h:outputText value="#{flight.destination.city} (#{flight.destination.airportCode})"/></td>
+                            <td><h:outputText value="#{flight.departureTime}"><f:convertDateTime pattern="dd.MM.yyyy HH:mm"/></h:outputText></td>
+                            <td><h:outputText value="#{flight.price}"/></td>
                             <td>
                                 <h:commandButton value="Cancel booking"
                                                  action="#{flightBean.cancelFlight(flight.id)}"/>

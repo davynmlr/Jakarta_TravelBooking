@@ -9,10 +9,6 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.util.List;
 
-/**
- * @RequestScoped: rebuilt each request
- * Delegates all logic to FlightService
- */
 @Named
 @RequestScoped
 public class FlightBean {
@@ -90,6 +86,13 @@ public class FlightBean {
     public boolean isBookedByCurrentUser(Flight flight) {
         if (!sessionBean.isLoggedIn()) return false;
         return flight.isBookedBy(sessionBean.getCurrentPassenger());
+    }
+
+    public List<Flight> getCurrentPassengerFlights() {
+        if (!sessionBean.isLoggedIn()) {
+            return java.util.Collections.emptyList();
+        }
+        return flightService.findFlightsByPassengerId(sessionBean.getCurrentPassenger().getId());
     }
 
     // ── Getters / Setters ──────────────────────────────────────────

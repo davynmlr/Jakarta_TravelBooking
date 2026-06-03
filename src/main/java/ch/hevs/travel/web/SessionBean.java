@@ -5,6 +5,7 @@ import ch.hevs.travel.service.PassengerService;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -16,6 +17,7 @@ import java.io.Serializable;
 @SessionScoped
 public class SessionBean implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Inject
@@ -68,14 +70,24 @@ public class SessionBean implements Serializable {
      * Redirects to login if no passenger is in session
      */
     public String requireLogin() {
-        if (!isLoggedIn()) {
+        if (currentPassenger == null) {
             return "login?faces-redirect=true";
         }
         return null;
     }
 
     // ── Getters / Setters ──────────────────────────────────────────
-    public Passenger getCurrentPassenger()       { return currentPassenger; }
+    public Passenger getCurrentPassenger() {
+        if (currentPassenger == null || currentPassenger.getId() == null) {
+            return currentPassenger;
+        }
+        Passenger fresh = passengerService.findById(currentPassenger.getId());
+        if (fresh != null) {
+            currentPassenger = fresh;
+        }
+        return currentPassenger;
+    }
+
     public void setCurrentPassenger(Passenger p) { this.currentPassenger = p; }
 
     public String getEmail()                     { return email; }

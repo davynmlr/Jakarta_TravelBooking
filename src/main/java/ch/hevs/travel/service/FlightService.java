@@ -33,24 +33,6 @@ public class FlightService {
         ).setParameter("destId", destinationId).getResultList();
     }
 
-    public List<Flight> findEconomyFlights() {
-        return em.createQuery(
-            "SELECT f FROM EconomyFlight f JOIN FETCH f.destination",
-            Flight.class
-        ).getResultList();
-    }
-
-    public List<Flight> findBusinessFlights() {
-        return em.createQuery(
-            "SELECT f FROM BusinessFlight f JOIN FETCH f.destination",
-            Flight.class
-        ).getResultList();
-    }
-
-    public Flight findFlightById(Long id) {
-        return em.find(Flight.class, id);
-    }
-
     @Transactional
     public void saveFlight(Flight flight) {
         if (flight.getId() == null) {
@@ -58,12 +40,6 @@ public class FlightService {
         } else {
             em.merge(flight);
         }
-    }
-
-    @Transactional
-    public void deleteFlight(Long id) {
-        Flight f = em.find(Flight.class, id);
-        if (f != null) em.remove(f);
     }
 
     // ── Destinations ───────────────────────────────────────────────
@@ -75,8 +51,11 @@ public class FlightService {
         ).getResultList();
     }
 
-    public Destination findDestinationById(Long id) {
-        return em.find(Destination.class, id);
+    public List<Flight> findFlightsByPassengerId(Long passengerId) {
+        return em.createQuery(
+            "SELECT f FROM Flight f JOIN f.passengers p WHERE p.id = :passengerId ORDER BY f.departureTime",
+            Flight.class
+        ).setParameter("passengerId", passengerId).getResultList();
     }
 
     @Transactional
@@ -90,12 +69,6 @@ public class FlightService {
 
     // ── Booking ────────────────────────────────────────────────────
 
-    /**
-     * @Transactional justified here because:
-     * 1. Two DB writes must happen together (link passenger + flight)
-     * 2. Capacity check + booking must be atomic
-     * 3. If anything fails, everything rolls back
-     */
     @Transactional
     public String bookFlight(Long flightId, Long passengerId) {
         Flight flight = em.find(Flight.class, flightId);
@@ -108,13 +81,10 @@ public class FlightService {
         flight.getPassengers().add(passenger);
         passenger.getFlights().add(flight);
         em.merge(flight);
+        em.merge(passenger);
         return "success";
     }
 
-    /**
-     * @Transactional justified here because:
-     * Both sides of the ManyToMany must be cleaned up atomically
-     */
     @Transactional
     public String cancelBooking(Long flightId, Long passengerId) {
         Flight flight = em.find(Flight.class, flightId);
@@ -125,6 +95,7 @@ public class FlightService {
         flight.getPassengers().removeIf(p -> p.getId().equals(passengerId));
         passenger.getFlights().removeIf(f -> f.getId().equals(flightId));
         em.merge(flight);
+        em.merge(passenger);
         return "success";
     }
 }
