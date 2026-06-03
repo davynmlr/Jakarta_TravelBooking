@@ -9,9 +9,9 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * @SessionScoped: one instance per HTTP session
- * Survives multiple requests — keeps the logged-in passenger across pages
- * Must implement Serializable for the container to manage it
+ * Session-scoped bean that holds authentication state for the current HTTP session.
+ * One instance exists per user session and it keeps the logged-in Passenger across pages.
+ * The bean is Serializable so the container can passivate/activate it.
  */
 @Named
 @SessionScoped
@@ -77,6 +77,12 @@ public class SessionBean implements Serializable {
     }
 
     // ── Getters / Setters ──────────────────────────────────────────
+    /**
+     * Return the current passenger stored in session. If the passenger has an id,
+     * fresh data is loaded from the database to avoid stale detached entities.
+     *
+     * @return current Passenger or null
+     */
     public Passenger getCurrentPassenger() {
         if (currentPassenger == null || currentPassenger.getId() == null) {
             return currentPassenger;

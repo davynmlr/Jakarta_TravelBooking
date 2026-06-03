@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Abstract base entity representing a flight.
+ * Subclasses represent specific cabin classes (e.g. Economy, Business).
+ * This entity is stored in a single table inheritance strategy with a discriminator column.
+ */
 @Entity
 @Table(name = "Flight")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -52,14 +57,29 @@ public abstract class Flight {
         this.destination = destination;
     }
 
-    // Abstract method — subclasses define their cabin class
+    /**
+     * Return the cabin class name for this flight (e.g. "Economy", "Business").
+     * Each concrete subclass must provide its own value.
+     *
+     * @return the cabin class name
+     */
     public abstract String getCabinClass();
 
-    // Business helpers
+    /**
+     * Check whether the flight still has available seats.
+     *
+     * @return true if the number of booked passengers is less than capacity
+     */
     public boolean hasAvailableSeats() {
         return passengers.size() < capacity;
     }
 
+    /**
+     * Check whether the given passenger has booked this flight.
+     *
+     * @param p passenger to check
+     * @return true if the passenger is present in the passengers list
+     */
     public boolean isBookedBy(Passenger p) {
         return passengers.contains(p);
     }

@@ -6,6 +6,10 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+/**
+ * JSF backing bean used for passenger registration.
+ * Collects form fields, validates the email and creates a new Passenger.
+ */
 @Named
 @RequestScoped
 public class RegisterBean {
@@ -24,6 +28,12 @@ public class RegisterBean {
     private String nationality;
     private String errorMessage;
 
+    /**
+     * Register a new passenger using the form fields stored in this bean.
+     * Performs a simple uniqueness check on the email and auto-logs the user in after success.
+     *
+     * @return navigation outcome (redirect to flights on success) or null to stay
+     */
     public String register() {
         if (passengerService.emailExists(email)) {
             errorMessage = "This email is already registered.";

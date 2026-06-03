@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a travel destination (city/airport) and the associated flights.
+ * Stored as a JPA entity with a one-to-many relationship to Flight.
+ */
 @Entity
 @Table(name = "Destination")
 public class Destination {
@@ -50,6 +54,10 @@ public class Destination {
     public String getTimezone()            { return timezone; }
     public void setTimezone(String t)      { this.timezone = t; }
 
+    /**
+     * Get flights associated with this destination.
+     * Be careful: the list is fetched eagerly in this model.
+     */
     public List<Flight> getFlights()       { return flights; }
     public void setFlights(List<Flight> f) { this.flights = f; }
 

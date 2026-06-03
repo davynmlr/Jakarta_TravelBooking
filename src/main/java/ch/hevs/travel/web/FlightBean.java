@@ -9,6 +9,10 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.util.List;
 
+/**
+ * JSF backing bean for flight listing and booking actions.
+ * Provides actions for booking/cancelling flights and filtering the list.
+ */
 @Named
 @RequestScoped
 public class FlightBean {
@@ -33,6 +37,14 @@ public class FlightBean {
 
     // ── Actions ────────────────────────────────────────────────────
 
+    /**
+     * Attempt to book a flight for the currently logged-in passenger.
+     * Redirects to login when the user is not authenticated.
+     * Updates the local flights list and sets a user-facing message.
+     *
+     * @param flightId id of the flight to book
+     * @return navigation outcome or null to stay on the same page
+     */
     public String bookFlight(Long flightId) {
         if (!sessionBean.isLoggedIn()) {
             return "login?faces-redirect=true";
@@ -50,6 +62,12 @@ public class FlightBean {
         return null;
     }
 
+    /**
+     * Cancel the booking of the current user for the provided flight id.
+     *
+     * @param flightId id of flight to cancel
+     * @return navigation outcome or null
+     */
     public String cancelFlight(Long flightId) {
         if (!sessionBean.isLoggedIn()) {
             return "login?faces-redirect=true";
@@ -63,6 +81,10 @@ public class FlightBean {
         return null;
     }
 
+    /**
+     * Filter flights by the selected destination and cabin class.
+     * Updates the `flights` property used by the UI.
+     */
     public void filterFlights() {
         List<Flight> all;
 
@@ -83,11 +105,21 @@ public class FlightBean {
         }
     }
 
+    /**
+     * Helper used by the UI to show/book/cancel actions: is the given flight
+     * booked by the currently logged-in passenger?
+     *
+     * @param flight flight to check
+     * @return true when the logged-in passenger booked the flight
+     */
     public boolean isBookedByCurrentUser(Flight flight) {
         if (!sessionBean.isLoggedIn()) return false;
         return flight.isBookedBy(sessionBean.getCurrentPassenger());
     }
 
+    /**
+     * Return the flights booked by the current passenger, or an empty list if not logged in.
+     */
     public List<Flight> getCurrentPassengerFlights() {
         if (!sessionBean.isLoggedIn()) {
             return java.util.Collections.emptyList();
