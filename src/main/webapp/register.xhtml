@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Travel Booking — Register</title>
+</h:head>
+<h:body>
+    <h1>Travel Booking</h1>
+    <h2>Create an account</h2>
+
+    <h:form id="registerForm">
+        <p>
+            <h:outputLabel for="firstname" value="First name: "/>
+            <h:inputText id="firstname" value="#{registerBean.firstname}"
+                         required="true"/>
+            <h:message for="firstname" style="color:red"/>
+        </p>
+
+        <p>
+            <h:outputLabel for="lastname" value="Last name: "/>
+            <h:inputText id="lastname" value="#{registerBean.lastname}"
+                         required="true"/>
+            <h:message for="lastname" style="color:red"/>
+        </p>
+
+        <p>
+            <h:outputLabel for="email" value="Email: "/>
+            <h:inputText id="email" value="#{registerBean.email}"
+                         required="true"/>
+            <h:message for="email" style="color:red"/>
+        </p>
+
+        <p>
+            <h:outputLabel for="password" value="Password: "/>
+            <h:inputSecret id="password" value="#{registerBean.password}"
+                           required="true"/>
+            <h:message for="password" style="color:red"/>
+        </p>
+
+        <p>
+            <h:outputLabel for="passport" value="Passport number: "/>
+            <h:inputText id="passport" value="#{registerBean.passport}"
+                         required="true"/>
+            <h:message for="passport" style="color:red"/>
+        </p>
+
+        <p>
+            <h:outputLabel for="nationality" value="Nationality: "/>
+            <h:inputText id="nationality" value="#{registerBean.nationality}"
+                         required="true"/>
+            <h:message for="nationality" style="color:red"/>
+        </p>
+
+        <h:panelGroup rendered="#{not empty registerBean.errorMessage}">
+            <p style="color:red">#{registerBean.errorMessage}</p>
+        </h:panelGroup>
+
+        <p>
+            <h:commandButton value="Register" action="#{registerBean.register}"/>
+        </p>
+    </h:form>
+
+    <p>Already have an account? <h:link value="Login" outcome="login"/></p>
+
+</h:body>
+</html>
