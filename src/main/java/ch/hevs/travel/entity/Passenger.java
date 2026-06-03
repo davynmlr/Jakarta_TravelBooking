@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Represents a passenger/customer of the travel system.
+ * Stored as a JPA entity. The class contains personal information and
+ * the flights the passenger has booked (many-to-many relationship).
+ */
 @Entity
 @Table(name = "Passenger")
 public class Passenger {
@@ -71,6 +76,11 @@ public class Passenger {
     public List<Flight> getFlights()            { return flights; }
     public void setFlights(List<Flight> f)      { this.flights = f; }
 
+    /**
+     * Convenience method returning the passenger's full name.
+     *
+     * @return firstname + " " + lastname
+     */
     public String getFullName()                 { return firstname + " " + lastname; }
 
     @Override

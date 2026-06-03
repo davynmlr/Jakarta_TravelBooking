@@ -10,6 +10,10 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.List;
 
+/**
+ * Service bean that encapsulates flight and destination related operations.
+ * Provides methods to query, persist and manage bookings.
+ */
 @Named
 @RequestScoped
 public class FlightService {
@@ -19,6 +23,11 @@ public class FlightService {
 
     // ── Flights ────────────────────────────────────────────────────
 
+    /**
+     * Retrieve all flights with their destinations fetched, ordered by departure time.
+     *
+     * @return list of flights
+     */
     public List<Flight> findAllFlights() {
         return em.createQuery(
             "SELECT f FROM Flight f JOIN FETCH f.destination ORDER BY f.departureTime",
@@ -26,6 +35,12 @@ public class FlightService {
         ).getResultList();
     }
 
+    /**
+     * Find flights for a specific destination
+     *
+     * @param destinationId id of the destination
+     * @return list of flights for the destination
+     */
     public List<Flight> findFlightsByDestination(Long destinationId) {
         return em.createQuery(
             "SELECT f FROM Flight f WHERE f.destination.id = :destId ORDER BY f.price",
@@ -34,6 +49,11 @@ public class FlightService {
     }
 
     @Transactional
+    /**
+     * Persist or merge a Flight entity.
+     *
+     * @param flight flight to save
+     */
     public void saveFlight(Flight flight) {
         if (flight.getId() == null) {
             em.persist(flight);
@@ -44,6 +64,11 @@ public class FlightService {
 
     // ── Destinations ───────────────────────────────────────────────
 
+    /**
+     * List all destinations ordered by city name.
+     *
+     * @return list of destinations
+     */
     public List<Destination> findAllDestinations() {
         return em.createQuery(
             "SELECT d FROM Destination d ORDER BY d.city",
@@ -51,6 +76,12 @@ public class FlightService {
         ).getResultList();
     }
 
+    /**
+     * Find flights booked by a specific passenger.
+     *
+     * @param passengerId passenger id
+     * @return list of flights booked by passenger
+     */
     public List<Flight> findFlightsByPassengerId(Long passengerId) {
         return em.createQuery(
             "SELECT f FROM Flight f JOIN f.passengers p WHERE p.id = :passengerId ORDER BY f.departureTime",
@@ -59,6 +90,11 @@ public class FlightService {
     }
 
     @Transactional
+    /**
+     * Persist or merge a Destination entity.
+     *
+     * @param destination destination to save
+     */
     public void saveDestination(Destination destination) {
         if (destination.getId() == null) {
             em.persist(destination);
@@ -70,6 +106,14 @@ public class FlightService {
     // ── Booking ────────────────────────────────────────────────────
 
     @Transactional
+    /**
+     * Book a flight for a passenger. Performs basic checks (exists, capacity, already booked)
+     * and updates both sides of the many-to-many relationship.
+     *
+     * @param flightId id of the flight
+     * @param passengerId id of the passenger
+     * @return "success", "full", "already_booked" or "error"
+     */
     public String bookFlight(Long flightId, Long passengerId) {
         Flight flight = em.find(Flight.class, flightId);
         Passenger passenger = em.find(Passenger.class, passengerId);
@@ -86,6 +130,13 @@ public class FlightService {
     }
 
     @Transactional
+    /**
+     * Cancel a passenger's booking on a flight and update both entities.
+     *
+     * @param flightId id of the flight
+     * @param passengerId id of the passenger
+     * @return "success" or "error"
+     */
     public String cancelBooking(Long flightId, Long passengerId) {
         Flight flight = em.find(Flight.class, flightId);
         Passenger passenger = em.find(Passenger.class, passengerId);

@@ -124,6 +124,10 @@ public class StartupBean {
         em.persist(chidi);
     }
 
+    /**
+     * Helper to create a Date from components (year, month, day, hour, minute).
+     * Months are 1-based here for convenience.
+     */
     private Date makeDate(int year, int month, int day, int hour, int min) {
         Calendar cal = Calendar.getInstance();
         cal.set(year, month - 1, day, hour, min, 0);
